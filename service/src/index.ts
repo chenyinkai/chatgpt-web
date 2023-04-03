@@ -1,3 +1,4 @@
+import path from 'path'
 import express from 'express'
 import type { RequestProps } from './types'
 import type { ChatMessage } from './chatgpt'
@@ -10,6 +11,7 @@ const app = express()
 const router = express.Router()
 
 app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, '../../dist')))
 app.use(express.json())
 
 app.all('*', (_, res, next) => {
@@ -84,4 +86,4 @@ app.use('', router)
 app.use('/api', router)
 app.set('trust proxy', 1)
 
-app.listen(3002, () => globalThis.console.log('Server is running on port 3002'))
+app.listen(9002, () => globalThis.console.log('Server is running on port 9002'))
