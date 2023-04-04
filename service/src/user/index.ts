@@ -2,10 +2,11 @@ import axios from 'axios'
 import qs from 'qs'
 import jwt from 'jsonwebtoken'
 import express from 'express'
+import { jwtAuth, jwtAuthError } from 'src/middleware/jwt'
 
 export const userRouter = express.Router()
 
-userRouter.get('/openid', async (req, res) => {
+userRouter.get('/user/openid', async (req, res) => {
   try {
     res.redirect(process.env.OPENID_REDIRECT_URL)
   }
@@ -14,7 +15,7 @@ userRouter.get('/openid', async (req, res) => {
   }
 })
 
-userRouter.get('/code', async (req, res) => {
+userRouter.get('/user/code', async (req, res) => {
   try {
     const { code, error, error_description } = req.query
     if (!code || error) {
@@ -47,6 +48,15 @@ userRouter.get('/code', async (req, res) => {
       expiresIn: '5d',
     })
     res.redirect(`${process.env.DOMAIN}?token=${token}`)
+  }
+  catch (error) {
+    res.send({ status: 'Fail', message: error.message, data: null })
+  }
+})
+
+userRouter.post('/user/auth', [jwtAuth, jwtAuthError], async (req, res) => {
+  try {
+    res.send({ status: 'Success', message: 'Verify successfully', data: { email: req.auth.email } })
   }
   catch (error) {
     res.send({ status: 'Fail', message: error.message, data: null })

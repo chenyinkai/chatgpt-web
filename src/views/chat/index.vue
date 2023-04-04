@@ -13,9 +13,10 @@ import { useUsingContext } from './hooks/useUsingContext'
 import HeaderComponent from './components/Header/index.vue'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { useChatStore, usePromptStore } from '@/store'
-import { fetchChatAPIProcess } from '@/api'
+import { useChatStore, usePromptStore, useUserStore } from '@/store'
+import { fetchChatAPIProcess, fetchUserInfo } from '@/api'
 import { t } from '@/locales'
+import { TOKEN_STORAGE_KEY } from '@/utils/request/axios'
 
 let controller = new AbortController()
 
@@ -26,6 +27,7 @@ const dialog = useDialog()
 const ms = useMessage()
 
 const chatStore = useChatStore()
+const userStore = useUserStore()
 
 useCopyCode()
 
@@ -455,6 +457,14 @@ const footerClass = computed(() => {
 })
 
 onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  const token = urlParams.get('token')
+  if (token)
+    window.localStorage.setItem(TOKEN_STORAGE_KEY, token)
+
+  fetchUserInfo().then((res) => {
+    userStore.updateUserInfo({ name: res.data.email })
+  })
   scrollToBottom()
   if (inputRef.value && !isMobile.value)
     inputRef.value?.focus()

@@ -7,7 +7,6 @@ import { auth } from './middleware/auth'
 import { limiter } from './middleware/limiter'
 import { isNotEmptyString } from './utils/is'
 import { userRouter } from './user'
-import { jwtAuth, jwtAuthError } from './middleware/jwt'
 
 const app = express()
 const router = express.Router()
@@ -84,20 +83,10 @@ router.post('/verify', async (req, res) => {
   }
 })
 
-router.get('/test', [jwtAuth, jwtAuthError], async (req, res) => {
-  try {
-    // eslint-disable-next-line no-console
-    console.log(req.headers)
-    res.send({ status: 'Success', message: 'Verify successfully', data: null })
-  }
-  catch (error) {
-    res.send({ status: 'Fail', message: error.message, data: null })
-  }
-})
-
 app.use('', router)
-app.use('/api/user', userRouter)
 app.use('/api', router)
 app.set('trust proxy', 1)
+app.use('', userRouter)
+app.use('/api', userRouter)
 
 app.listen(9002, () => globalThis.console.log('Server is running on port 9002'))

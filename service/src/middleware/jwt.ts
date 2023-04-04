@@ -7,7 +7,7 @@ const jwtAuth = expressjwt({
 
 const jwtAuthError = async (err, req, res, next) => {
   if (err.name === 'UnauthorizedError')
-    res.status(401).send('invalid token...')
+    res.status(200).send({ status: 'Unauthorized', message: err.name, data: null })
   else
     next(err)
 }

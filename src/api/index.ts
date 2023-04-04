@@ -43,6 +43,12 @@ export function fetchSession<T>() {
   })
 }
 
+export function fetchUserInfo<T = any>() {
+  return post<T>({
+    url: '/user/auth',
+  })
+}
+
 export function fetchVerify<T>(token: string) {
   return post<T>({
     url: '/verify',

@@ -1,13 +1,14 @@
 import axios, { type AxiosResponse } from 'axios'
-import { useAuthStore } from '@/store'
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_GLOB_API_URL,
 })
 
+export const TOKEN_STORAGE_KEY = 'EZXR_CHATGPT_KEY'
+
 service.interceptors.request.use(
   (config) => {
-    const token = useAuthStore().token
+    const token = window.localStorage.getItem(TOKEN_STORAGE_KEY)
     if (token)
       config.headers.Authorization = `Bearer ${token}`
     return config
