@@ -1,5 +1,6 @@
 import path from 'path'
 import express from 'express'
+import compression from 'compression'
 import type { RequestProps } from './types'
 import type { ChatMessage } from './chatgpt'
 import { chatConfig, chatReplyProcess, currentModel } from './chatgpt'
@@ -12,6 +13,7 @@ import { jwtAuth, jwtAuthError } from './middleware/jwt'
 const app = express()
 const router = express.Router()
 
+app.use(compression())
 app.use(express.static('public'))
 app.use(express.static(path.join(__dirname, '../../dist')))
 app.use(express.json())
