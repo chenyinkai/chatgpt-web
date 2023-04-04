@@ -15,9 +15,9 @@ export interface UserState {
 export function defaultSetting(): UserState {
   return {
     userInfo: {
-      avatar: 'https://ezxr.com/assets/favicon.ico',
+      avatar: 'https://ar-scene-source.nosdn.127.net/5a8a036df1526fb77db2ab2cc6a8664d.png',
       name: 'EZXR',
-      description: 'EZXR chatgpt',
+      description: 'EZXR ChatGPT',
     },
   }
 }
