@@ -7,6 +7,7 @@ import { auth } from './middleware/auth'
 import { limiter } from './middleware/limiter'
 import { isNotEmptyString } from './utils/is'
 import { userRouter } from './user'
+import { jwtAuth, jwtAuthError } from './middleware/jwt'
 
 const app = express()
 const router = express.Router()
@@ -22,7 +23,7 @@ app.all('*', (_, res, next) => {
   next()
 })
 
-router.post('/chat-process', [auth, limiter], async (req, res) => {
+router.post('/chat-process', [auth, limiter, jwtAuth, jwtAuthError], async (req, res) => {
   res.setHeader('Content-type', 'application/octet-stream')
 
   try {
@@ -46,7 +47,7 @@ router.post('/chat-process', [auth, limiter], async (req, res) => {
   }
 })
 
-router.post('/config', auth, async (req, res) => {
+router.post('/config', [auth, jwtAuth, jwtAuthError], async (req, res) => {
   try {
     const response = await chatConfig()
     res.send(response)
